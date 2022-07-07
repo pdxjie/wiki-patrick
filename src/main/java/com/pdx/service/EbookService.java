@@ -1,6 +1,8 @@
 package com.pdx.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.pdx.entity.Ebook;
+import com.pdx.entity.req.EbookReq;
 
 import java.util.List;
 
@@ -10,6 +12,6 @@ import java.util.List;
  * @Date 2022-07-07 00:27
  * @Description
  */
-public interface EbookService {
-    List<Ebook> list();
+public interface EbookService extends IService<Ebook> {
+
 }

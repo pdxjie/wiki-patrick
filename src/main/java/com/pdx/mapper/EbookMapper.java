@@ -1,7 +1,10 @@
 package com.pdx.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.pdx.entity.Ebook;
+import com.pdx.entity.req.EbookReq;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -12,7 +15,6 @@ import java.util.List;
  * @Description
  */
 @Mapper
-public interface EbookMapper {
-    List<Ebook> list();
+public interface EbookMapper extends BaseMapper<Ebook> {
 
 }
