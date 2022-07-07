@@ -106,7 +106,7 @@ export default Vue.extend({
     }
     onMounted(()=>{
       console.log("onMounted")
-      axios.post('http://localhost:3031/ebook/list',queryVo).then((res) =>{
+      axios.post('/ebook/list',queryVo).then((res) =>{
         const data = res.data.data
         ebooks.value = data
       });

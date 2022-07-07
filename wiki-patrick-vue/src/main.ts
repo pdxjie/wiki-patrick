@@ -4,7 +4,9 @@ import router from './router'
 import store from './store'
 import Antd from 'ant-design-vue'
 import 'ant-design-vue/dist/antd.css'
-
+import axios from "axios";
+// @ts-ignore
+axios.defaults.baseURL = process.env.VUE_APP_SERVER
 Vue.config.productionTip = false
 
 Vue.use(Antd)
