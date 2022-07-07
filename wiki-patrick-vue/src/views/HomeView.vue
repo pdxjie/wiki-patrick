@@ -64,9 +64,19 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import HelloWorld from '@/components/HelloWorld.vue'; // @ is an alias to /src
-
+import axios from 'axios'
 export default Vue.extend({
-  name: 'HomeView'
+  name: 'HomeView',
+  // Vue3新增的初始化方法
+  setup(){
+    console.log('setup')
+    const queryVo = {
+      id:null,
+      name:null
+    }
+    axios.post('http://localhost:3031/ebook/list',queryVo).then((res) =>{
+      console.log(res)
+    })
+  }
 });
 </script>
