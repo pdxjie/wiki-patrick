@@ -30,10 +30,10 @@ public class EbookController {
         ResultData<List<Ebook>> resultData = new ResultData<>();
         QueryWrapper<Ebook> wrapper = new QueryWrapper<>();
         //条件查询
-        if (StringUtils.isEmpty(String.valueOf(reqVo.getId()))){
+        if ((reqVo.getId() != null)){
             wrapper.eq("id",reqVo.getId());
         }
-        if (StringUtils.isEmpty(reqVo.getName())){
+        if (!StringUtils.isEmpty(reqVo.getName())){
             wrapper.like("name", reqVo.getName());
         }
         //Page<Ebook> page = new Page<>()
