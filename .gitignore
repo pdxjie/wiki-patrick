@@ -36,3 +36,4 @@ build/
 .mvn
 .gitignore
 target/**
+wiki-patrick-vue/node_modules/**
