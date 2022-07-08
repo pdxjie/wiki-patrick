@@ -17,6 +17,9 @@ module.exports = {
     'vue/no-unused-components':'off',
     '@typescript-eslint/no-explicit-any':'off',
     '@typescript-eslint/ban-ts-comment':'off',
-    'vue/no-unused-vars':'off'
+    'vue/no-unused-vars':'off',
+    'vue/no-multiple-template-root':'off',
+    'vue/no-v-model-argument':'off',
+    'vue/valid-v-slot':'off'
   }
 }
