@@ -3,6 +3,7 @@ package com.pdx.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.pdx.entity.Ebook;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * @author 派 大 星

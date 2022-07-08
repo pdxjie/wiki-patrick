@@ -15,6 +15,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
+
 /**
  * @author 派 大 星
  * @website https://blog.csdn.net/Gaowumao
@@ -65,4 +67,16 @@ public class EbookController {
         resultData.setMessage("修改成功");
         return resultData;
     }
+
+    @DeleteMapping("/delete/{id}")
+    public ResultData deleteById(@PathVariable("id")String id){
+        ResultData resultData = new ResultData();
+        ebookService.removeById(id);
+        resultData.setMessage("删除成功");
+        resultData.setSuccess(true);
+        return resultData;
+    }
+
+
+
 }

@@ -18,13 +18,13 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class EbookSaveReq implements Serializable {
 
-    private Long id;
+    private String id;
 
     private String name;
 
-    private Integer categoryId;
+    private String categoryId;
 
-    private Integer categoryPid;
+    private String categoryPid;
 
     private String description;
 

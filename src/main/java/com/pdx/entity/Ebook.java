@@ -1,6 +1,8 @@
 package com.pdx.entity;
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.sun.javafx.beans.IDProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,13 +21,13 @@ import java.io.Serializable;
 @TableName("e_book")
 public class Ebook implements Serializable {
 
-    private Long id;
+    private String id;
 
     private String name;
 
-    private Integer categoryId;
+    private String categoryId;
 
-    private Integer categoryPid;
+    private String categoryPid;
 
     private String description;
 
