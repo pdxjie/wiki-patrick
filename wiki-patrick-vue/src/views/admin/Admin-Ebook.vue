@@ -88,10 +88,11 @@ export default defineComponent({
         axios.post('/ebook/list',params).then(res =>{
           loading.value = false
           const data = res.data.data
-          ebooks.value = data
+          ebooks.value = data.list
 
           //重置分页按钮
           pagination.value.current = params.page
+          pagination.value.total = res.data.data.total
         })
       }
 
@@ -106,7 +107,10 @@ export default defineComponent({
       })
     }
     onMounted(()=>{
-      handleQuery({})
+      handleQuery({
+        page:1,
+        size: pagination.value.pageSize
+      })
     })
     return {
       ebooks,
