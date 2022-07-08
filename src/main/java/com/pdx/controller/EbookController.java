@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.pdx.entity.Ebook;
 import com.pdx.entity.req.EbookReq;
+import com.pdx.entity.resp.EbookResp;
 import com.pdx.entity.resp.ResultData;
 import com.pdx.service.EbookService;
 import org.apache.commons.lang3.StringUtils;
@@ -26,8 +27,8 @@ public class EbookController {
     private EbookService ebookService;
 
     @PostMapping("/list")
-    public ResultData<List<Ebook>> list(@RequestBody(required = false) EbookReq reqVo){
-        ResultData<List<Ebook>> resultData = new ResultData<>();
+    public ResultData list(@RequestBody(required = false) EbookReq reqVo){
+        ResultData<EbookResp<Ebook>> resultData = new ResultData<>();
         QueryWrapper<Ebook> wrapper = new QueryWrapper<>();
         //条件查询
         if ((reqVo.getId() != null)){
@@ -36,9 +37,13 @@ public class EbookController {
         if (!StringUtils.isEmpty(reqVo.getName())){
             wrapper.like("name", reqVo.getName());
         }
-        //Page<Ebook> page = new Page<>()
-        List<Ebook> list = ebookService.list(wrapper);
-        resultData.setData(list);
+        Page<Ebook> page = new Page<>(reqVo.getPage(),reqVo.getSize());
+
+        Page<Ebook> ebookPage = ebookService.page(page, wrapper);
+        EbookResp<Ebook> ebookResp = new EbookResp<>();
+        ebookResp.setTotal(ebookPage.getTotal());
+        ebookResp.setList(ebookPage.getRecords());
+        resultData.setData(ebookResp);
         resultData.setMessage("操作成功");
         return resultData;
     }
