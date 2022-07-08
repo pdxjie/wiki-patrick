@@ -15,6 +15,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Arrays;
 
 /**
@@ -31,7 +32,7 @@ public class EbookController {
     private EbookService ebookService;
 
     @PostMapping("/list")
-    public ResultData list(@RequestBody(required = false) EbookQueryReq reqVo){
+    public ResultData list(@Valid @RequestBody(required = false) EbookQueryReq reqVo){
         ResultData<EbookResp<Ebook>> resultData = new ResultData<>();
         QueryWrapper<Ebook> wrapper = new QueryWrapper<>();
         //条件查询
@@ -53,7 +54,7 @@ public class EbookController {
     }
 
     @PostMapping("/saveOrUpdate")
-    public ResultData saveOrUpdate(@RequestBody(required = false) EbookSaveReq req){
+    public ResultData saveOrUpdate(@Valid @RequestBody(required = false) EbookSaveReq req){
         ResultData resultData = new ResultData();
         Ebook ebook = new Ebook();
         BeanUtils.copyProperties(req,ebook);
