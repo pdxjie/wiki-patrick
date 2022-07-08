@@ -2,11 +2,7 @@ package com.pdx.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.pdx.entity.Ebook;
-import com.pdx.entity.req.EbookReq;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-
-import java.util.List;
 
 /**
  * @author 派 大 星

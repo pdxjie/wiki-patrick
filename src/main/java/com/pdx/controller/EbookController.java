@@ -3,15 +3,17 @@ package com.pdx.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.pdx.entity.Ebook;
-import com.pdx.entity.req.EbookReq;
+import com.pdx.entity.req.EbookQueryReq;
+import com.pdx.entity.req.EbookSaveReq;
 import com.pdx.entity.resp.EbookResp;
 import com.pdx.entity.resp.ResultData;
 import com.pdx.service.EbookService;
+import com.pdx.util.CopyUtil;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * @author 派 大 星
@@ -27,7 +29,7 @@ public class EbookController {
     private EbookService ebookService;
 
     @PostMapping("/list")
-    public ResultData list(@RequestBody(required = false) EbookReq reqVo){
+    public ResultData list(@RequestBody(required = false) EbookQueryReq reqVo){
         ResultData<EbookResp<Ebook>> resultData = new ResultData<>();
         QueryWrapper<Ebook> wrapper = new QueryWrapper<>();
         //条件查询
@@ -45,6 +47,22 @@ public class EbookController {
         ebookResp.setList(ebookPage.getRecords());
         resultData.setData(ebookResp);
         resultData.setMessage("操作成功");
+        return resultData;
+    }
+
+    @PostMapping("/saveOrUpdate")
+    public ResultData saveOrUpdate(@RequestBody(required = false) EbookSaveReq req){
+        ResultData resultData = new ResultData();
+        Ebook ebook = new Ebook();
+        BeanUtils.copyProperties(req,ebook);
+        //如果ID为空则说明是新增
+        if (ObjectUtils.isEmpty(req.getId())){
+            ebookService.save(ebook);
+        }else {
+            ebookService.updateById(ebook);
+        }
+        resultData.setSuccess(true);
+        resultData.setMessage("修改成功");
         return resultData;
     }
 }

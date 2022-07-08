@@ -2,9 +2,6 @@ package com.pdx.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.pdx.entity.Ebook;
-import com.pdx.entity.req.EbookReq;
-
-import java.util.List;
 
 /**
  * @author 派 大 星
