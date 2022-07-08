@@ -4,6 +4,11 @@
     <a-layout-content
         :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
     >
+      <p>
+        <a-button type="primary" @click="add()" size="middle">
+          推荐
+        </a-button>
+      </p>
       <a-table
         :columns="columns"
         :row-key="record => record.id"
@@ -12,12 +17,12 @@
         :loading="loading"
         @change="handleTableChange"
       >
-        <template v-slot:cover="{text:cover}">
+        <template #cover="{text:cover}">
           <img v-if="cover" :src="cover" alt="avatar">
         </template>
-        <template v-slot:action="{text,record}">
+        <template slot="action" slot-scope="record">
           <a-space size="small">
-            <a-button type="primary" @click="edit">
+            <a-button type="primary" @click="edit(record)">
               更新
             </a-button>
             <a-button type="danger">
@@ -35,23 +40,23 @@
         @ok="handleModalOk"
         @cancel="handleCancel"
     >
-<!--      <a-form :model="ebook" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }">-->
-<!--        <a-form-item label="封面">-->
-<!--          <a-input v-model:value="ebook.cover" />-->
-<!--        </a-form-item>-->
-<!--        <a-form-item label="名称">-->
-<!--          <a-input v-model:value="ebook.name"/>-->
-<!--        </a-form-item>-->
-<!--        <a-form-item label="分类一">-->
-<!--          <a-input v-model:value="ebook.categoryId"/>-->
-<!--        </a-form-item>-->
-<!--        <a-form-item label="分类二">-->
-<!--          <a-input v-model:value="ebook.categoryPid"/>-->
-<!--        </a-form-item>-->
-<!--        <a-form-item label="描述">-->
-<!--          <a-input v-model:value="ebook.description" type="text"/>-->
-<!--        </a-form-item>-->
-<!--      </a-form>-->
+      <a-form v-model="ebook" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }">
+        <a-form-item label="封面">
+          <a-input v-model:value="ebook.cover" />
+        </a-form-item>
+        <a-form-item label="名称">
+          <a-input v-model:value="ebook.name"/>
+        </a-form-item>
+        <a-form-item label="分类一">
+          <a-input v-model:value="ebook.categoryId"/>
+        </a-form-item>
+        <a-form-item label="分类二">
+          <a-input v-model:value="ebook.categoryPid"/>
+        </a-form-item>
+        <a-form-item label="描述">
+          <a-input v-model:value="ebook.description" type="text"/>
+        </a-form-item>
+      </a-form>
     </a-modal>
   </a-layout>
 </template>
@@ -65,7 +70,7 @@ export default defineComponent({
     const ebooks = ref()
     const pagination = ref({
       current:1,
-      pageSize:1,
+      pageSize:10,
       total:0
     })
     const loading = ref(false)
@@ -130,35 +135,52 @@ export default defineComponent({
         size:pagination.pageSize
       })
     }
+
+    //表单
+    const ebook = ref({})
+    const modalVisible = ref(false)
+    const modalLoading = ref(false)
+    const handleModalOk = () =>{
+      modalLoading.value = true
+      axios.post('/ebook/saveOrUpdate',ebook.value).then(res =>{
+        const data = res.data
+        if (data.success){
+          modalVisible.value = false
+          modalLoading.value = false
+
+          //重新加载列表
+          handleQuery({
+            page:1,
+            size: pagination.value.pageSize
+          })
+        }
+      })
+    }
+
+
     onMounted(()=>{
       handleQuery({
         page:1,
         size: pagination.value.pageSize
       })
     })
-    //表单
-    const modalVisible = ref(false)
-    const modalLoading = ref(false)
-    const handleModalOk = () =>{
-      modalLoading.value = true
-      setTimeout(()=>{
-        modalVisible.value = false
-        modalLoading.value = false
-      },2000)
-    }
+
 
     const handleCancel = ()=>{
       modalVisible.value = false
     }
     //编辑
-    const edit = ()=>{
+    const edit = (record:any)=>{
+      console.log('记录：'+ record)
       modalVisible.value = true
+      ebook.value = record
     }
 
-
-
-
-
+    //编辑
+    const add = ()=>{
+      modalVisible.value = true
+      ebook.value = {}
+    }
 
     return {
       ebooks,
@@ -168,6 +190,9 @@ export default defineComponent({
       handleTableChange,
 
       edit,
+      add,
+
+      ebook,
       modalVisible,
       modalLoading,
       handleModalOk,
