@@ -5,10 +5,27 @@
         :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
     >
       <p>
-        <a-button type="primary" @click="add()">
-          推荐
-        </a-button>
+<!--        <a-form layout="inline" v-model="param">-->
+<!--          <a-form-item>-->
+<!--            <a-input v-model:value="param.name" placeholder="请输入名称" />-->
+<!--          </a-form-item>-->
+<!--          <a-form-item>-->
+<!--            <a-button type="primary" @click="handleQuery({page:1,size:pagination.pageSize})">-->
+<!--              查询-->
+<!--            </a-button>-->
+<!--          </a-form-item>-->
+<!--          <a-form-item>-->
+<!--            <a-button type="primary" @click="add()">-->
+<!--              推荐-->
+<!--            </a-button>-->
+<!--          </a-form-item>-->
+<!--        </a-form>-->
+          <a-button type="primary" @click="add()">
+            推荐
+          </a-button>
       </p>
+
+
       <a-table
         :columns="columns"
         :row-key="record => record.id"
