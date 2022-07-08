@@ -5,7 +5,7 @@
         :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
     >
       <p>
-        <a-button type="primary" @click="add()" size="middle">
+        <a-button type="primary" @click="add()">
           推荐
         </a-button>
       </p>
@@ -25,9 +25,18 @@
             <a-button type="primary" @click="edit(record)">
               更新
             </a-button>
-            <a-button type="danger">
-              删除
-            </a-button>
+            <a-popconfirm
+              title="确认要永久删除吗?"
+              ok-text="确定"
+              cancel-text="取消"
+              @confirm="handleDelete(record.id)"
+
+            >
+              <a-button type="danger">
+                删除
+              </a-button>
+            </a-popconfirm>
+
           </a-space>
         </template>
       </a-table>
@@ -181,6 +190,17 @@ export default defineComponent({
       modalVisible.value = true
       ebook.value = {}
     }
+    const handleDelete = (id:number)=>{
+      axios.delete('/ebook/delete/'+id).then(res =>{
+        if (res.data.success){
+          //重新加载列表
+          handleQuery({
+            page:pagination.value.current,
+            size: pagination.value.pageSize
+          })
+        }
+      })
+    }
 
     return {
       ebooks,
@@ -191,7 +211,7 @@ export default defineComponent({
 
       edit,
       add,
-
+      handleDelete,
       ebook,
       modalVisible,
       modalLoading,
