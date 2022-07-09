@@ -3,6 +3,8 @@ import VueRouter, { RouteConfig } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import AboutView from '../views/AboutView.vue'
 import AdminEbook from '../views/admin/Admin-Ebook.vue'
+// @ts-ignore
+import AdminCategory from '../views/admin/Admin-Category'
 Vue.use(VueRouter)
 
 const routes: Array<RouteConfig> = [
@@ -12,15 +14,21 @@ const routes: Array<RouteConfig> = [
     component: HomeView
   },
   {
+    path: '/admin/ebook',
+    name: 'AdminEbook',
+    component: AdminEbook
+  },
+  {
+    path: '/admin/category',
+    name: 'AdminCategory',
+    component: AdminCategory
+  },
+  {
     path: '/about',
     name: 'about',
     component: AboutView
   },
-  {
-    path: '/admin/ebook',
-    name: 'AdminEbook',
-    component: AdminEbook
-  }
+
 ]
 
 const router = new VueRouter({
