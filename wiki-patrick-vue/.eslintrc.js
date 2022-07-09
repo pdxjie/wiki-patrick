@@ -20,6 +20,7 @@ module.exports = {
     'vue/no-unused-vars':'off',
     'vue/no-multiple-template-root':'off',
     'vue/no-v-model-argument':'off',
-    'vue/valid-v-slot':'off'
+    'vue/valid-v-slot':'off',
+    '@typescript-eslint/ban-types':'off'
   }
 }

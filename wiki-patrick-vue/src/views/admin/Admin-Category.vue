@@ -7,11 +7,8 @@
       <p>
         <a-form layout="inline" v-model="param">
           <a-form-item>
-            <a-input v-model:value="param.name" placeholder="请输入名称" />
-          </a-form-item>
-          <a-form-item>
-            <a-button type="primary" @click="handleQuery({page:1,size:pagination.pageSize})">
-              查询
+            <a-button type="primary" @click="handleQuery()">
+              刷新数据
             </a-button>
           </a-form-item>
           <a-form-item>
@@ -24,8 +21,8 @@
       <a-table
         :columns="columns"
         :row-key="record => record.id"
-        :data-source="categorys"
-        :pagination="pagination"
+        :data-source="level1"
+        :pagination="false"
         :loading="loading"
         @change="handleTableChange"
       >
@@ -66,6 +63,19 @@
         <a-form-item label="名称">
           <a-input v-model:value="category.name"/>
         </a-form-item>
+        <a-form-item label="父级分类">
+          <a-select
+            v-model:value="category.pid"
+            ref="select"
+          >
+            <a-select-option value="000">
+              无
+            </a-select-option>
+            <a-select-option v-for="c in level1" :key="c.id" :value="c.id" :disabled="category.id === c.id">
+              {{c.name}}
+            </a-select-option>
+          </a-select>
+        </a-form-item>
         <a-form-item label="顺序">
           <a-input v-model:value="category.sort" type="text"/>
         </a-form-item>
@@ -85,11 +95,6 @@ export default defineComponent({
     const param = ref()
     param.value = {}
     const categorys = ref()
-    const pagination = ref({
-      current:1,
-      pageSize:10,
-      total:0
-    })
     const loading = ref(false)
     const columns = [
       {
@@ -112,41 +117,35 @@ export default defineComponent({
         scopedSlots: {customRender: 'action'}
       }
     ];
+
+    const level1 = ref()
+    level1.value = []
+
+
+
+
     /**
      * 数据查询
      */
-    const handleQuery = (params: any)=>{
+    const handleQuery = ()=>{
       loading.value = true
-      axios.get('/category/list',{
-        params:{
-          page: params.page,
-          size: params.size,
-          name: param.value.name
-        }
-      }).then(res =>{
+      level1.value = []
+      axios.get('/category/all').then(res =>{
         loading.value = false
         const data = res.data.data
         if (res.data.success){
-          categorys.value = data.list
-          //重置分页按钮
-          pagination.value.current = params.page
-          pagination.value.total = res.data.data.total
+          categorys.value = data
+          console.log('原始数组',categorys.value)
+          level1.value = []
+          level1.value = Tool.array2Tree(categorys.value,'000')
+          console.log('树形结构',level1.value)
         }else {
           message.error(res.data.message)
         }
 
       })
     }
-    /**
-     * 表格点击页码时出发
-     */
-    const handleTableChange = (pagination: any)=>{
-      console.log('看看自带的分页参数'+pagination)
-      handleQuery({
-        page:pagination.current,
-        size:pagination.pageSize
-      })
-    }
+
 
     //表单
     const category = ref({})
@@ -159,22 +158,16 @@ export default defineComponent({
         if (data.success){
           modalVisible.value = false
           modalLoading.value = false
-
+          message.success('操作成功')
           //重新加载列表
-          handleQuery({
-            page:1,
-            size: pagination.value.pageSize
-          })
+          handleQuery()
         }
       })
     }
 
 
     onMounted(()=>{
-      handleQuery({
-        page:1,
-        size: pagination.value.pageSize
-      })
+      handleQuery()
     })
 
 
@@ -196,23 +189,19 @@ export default defineComponent({
     const handleDelete = (id:number)=>{
       axios.delete('/category/delete/'+id).then(res =>{
         if (res.data.success){
+          message.success('删除成功')
           //重新加载列表
-          handleQuery({
-            page:pagination.value.current,
-            size: pagination.value.pageSize
-          })
+          handleQuery()
         }
       })
     }
 
     return {
       param,
-      categorys,
-      pagination,
+      //categorys,
+      level1,
       columns,
       loading,
-      handleTableChange,
-
       edit,
       add,
       handleDelete,
