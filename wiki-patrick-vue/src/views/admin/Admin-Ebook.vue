@@ -5,24 +5,21 @@
         :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
     >
       <p>
-<!--        <a-form layout="inline" v-model="param">-->
-<!--          <a-form-item>-->
-<!--            <a-input v-model:value="param.name" placeholder="请输入名称" />-->
-<!--          </a-form-item>-->
-<!--          <a-form-item>-->
-<!--            <a-button type="primary" @click="handleQuery({page:1,size:pagination.pageSize})">-->
-<!--              查询-->
-<!--            </a-button>-->
-<!--          </a-form-item>-->
-<!--          <a-form-item>-->
-<!--            <a-button type="primary" @click="add()">-->
-<!--              推荐-->
-<!--            </a-button>-->
-<!--          </a-form-item>-->
-<!--        </a-form>-->
-          <a-button type="primary" @click="add()">
-            推荐
-          </a-button>
+        <a-form layout="inline" v-model="param">
+          <a-form-item>
+            <a-input v-model:value="param.name" placeholder="请输入名称" />
+          </a-form-item>
+          <a-form-item>
+            <a-button type="primary" @click="handleQuery({page:1,size:pagination.pageSize})">
+              查询
+            </a-button>
+          </a-form-item>
+          <a-form-item>
+            <a-button type="primary" @click="add()">
+              推荐
+            </a-button>
+          </a-form-item>
+        </a-form>
       </p>
 
 
@@ -94,6 +91,8 @@ import { message } from 'ant-design-vue'
 export default defineComponent({
   name:'Admin-Ebook',
   setup(){
+    const param = ref()
+    param.value = {}
     const ebooks = ref()
     const pagination = ref({
       current:1,
@@ -143,7 +142,13 @@ export default defineComponent({
      */
     const handleQuery = (params: any)=>{
       loading.value = true
-      axios.post('/ebook/list',params).then(res =>{
+      axios.get('/ebook/list',{
+        params:{
+          page: params.page,
+          size: params.size,
+          name: param.value.name
+        }
+      }).then(res =>{
         loading.value = false
         const data = res.data.data
         if (res.data.success){
@@ -226,6 +231,7 @@ export default defineComponent({
     }
 
     return {
+      param,
       ebooks,
       pagination,
       columns,
@@ -239,7 +245,8 @@ export default defineComponent({
       modalVisible,
       modalLoading,
       handleModalOk,
-      handleCancel
+      handleCancel,
+      handleQuery
     }
   }
 })
