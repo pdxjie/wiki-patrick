@@ -31,8 +31,8 @@ public class EbookController {
     @Autowired
     private EbookService ebookService;
 
-    @PostMapping("/list")
-    public ResultData list(@Valid @RequestBody(required = false) EbookQueryReq reqVo){
+    @GetMapping("/list")
+    public ResultData list(@Valid EbookQueryReq reqVo){
         ResultData<EbookResp<Ebook>> resultData = new ResultData<>();
         QueryWrapper<Ebook> wrapper = new QueryWrapper<>();
         //条件查询
