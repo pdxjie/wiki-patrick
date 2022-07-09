@@ -51,6 +51,18 @@ public class CategoryController {
         return resultData;
     }
 
+
+    @GetMapping("/all")
+    public ResultData all(){
+        ResultData<List<Category>> resultData = new ResultData<>();
+        QueryWrapper<Category> wrapper = new QueryWrapper<>();
+        wrapper.orderByAsc("sort");
+        List<Category> list = categoryService.list(wrapper);
+        resultData.setData(list);
+        resultData.setMessage("操作成功");
+        return resultData;
+    }
+
     @PostMapping("/saveOrUpdate")
     public ResultData saveOrUpdate(@Valid @RequestBody(required = false) CategorySaveReq req){
         ResultData resultData = new ResultData();
