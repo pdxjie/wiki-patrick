@@ -6,39 +6,72 @@
           :style="{ height: '100%', borderRight: 0 }"
           @click="handleClick"
       >
-
+        <a-menu-item key="welcome">
+            <MailOutlined/>
+            <span>全部资源</span>
+        </a-menu-item>
         <a-sub-menu v-for="item in level1" :key="item.id">
           <template v-slot:title>
-            <span> <user-outlined/>{{item.name}} </span>
+            <span> {{item.name}} </span>
           </template>
           <a-menu-item v-for="child in item.children" :key="child.id">
-            <MailOutlined/><span>{{child.name}}</span>
+            <span>{{child.name}}</span>
           </a-menu-item>
         </a-sub-menu>
       </a-menu>
     </a-layout-sider>
 
-    <a-layout-content :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }">
-      <!--电子书列表-->
 
-      <a-list item-layout="vertical" size="large" :data-source="ebooks">
+
+    <a-layout-content :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }">
+
+      <div class="welcome" v-show="isShowAll">
+        <!--电子书列表-->
+        <a-list  item-layout="vertical" size="large" :grid="{ gutter: 20, column: 3 }" :data-source="ebooks">
+          <template #renderItem="{ item }">
+            <a-card hoverable style="margin-right: 10px;margin-bottom: 10px;">
+              <a-list-item key="item.name">
+                <template #actions>
+                <span v-for="{ type, text } in actions" :key="type">
+                  <component v-bind:is="type" style="margin-right: 8px" />
+                  {{ text }}
+                </span>
+                </template>
+                <a-list-item-meta :description="item.description">
+                  <template #title>
+                    <a :href="item.href">{{ item.name }}</a>
+                  </template>
+                  <template #avatar>
+                    <a-avatar :src="item.cover" />
+                  </template>
+                </a-list-item-meta>
+              </a-list-item>
+            </a-card>
+          </template>
+        </a-list>
+      </div>
+
+      <!--电子书列表-->
+      <a-list v-show="!isShowAll" item-layout="vertical" size="large" :grid="{ gutter: 20, column: 3 }" :data-source="ebooks">
         <template #renderItem="{ item }">
-          <a-list-item key="item.title">
-            <template #actions>
-              <span v-for="{ type, text } in actions" :key="type">
-                <component v-bind:is="type" style="margin-right: 8px" />
-                {{ text }}
-              </span>
-            </template>
-            <a-list-item-meta :description="item.description">
-              <template #title>
-                <a :href="item.href">{{ item.name }}</a>
+          <a-card hoverable style="margin-right: 10px;margin-bottom: 10px;">
+            <a-list-item key="item.name">
+              <template #actions>
+                <span v-for="{ type, text } in actions" :key="type">
+                  <component v-bind:is="type" style="margin-right: 8px" />
+                  {{ text }}
+                </span>
               </template>
-              <template #avatar>
-                <a-avatar :src="item.cover" />
-              </template>
-            </a-list-item-meta>
-          </a-list-item>
+              <a-list-item-meta :description="item.description">
+                <template #title>
+                  <a :href="item.href">{{ item.name }}</a>
+                </template>
+                <template #avatar>
+                  <a-avatar :src="item.cover" />
+                </template>
+              </a-list-item-meta>
+            </a-list-item>
+          </a-card>
         </template>
       </a-list>
     </a-layout-content>
@@ -54,22 +87,13 @@ import {Tool} from "@/util/tool";
 
 
 const listData: any = [];
-for (let i = 0; i < 23; i++) {
-  listData.push({
-    href: 'https://www.antdv.com/',
-    title: `ant design vue part ${i}`,
-    avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-    description:
-      'Ant Design, a design language for background applications, is refined by Ant UED Team.',
-    content:
-      'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
-  });
-}
 
 export default defineComponent({
   name: 'HomeView',
   // Vue3新增的初始化方法
   setup() {
+    const isShowAll = ref(true)
+    let categoryId = ''
     const level1 = ref()
     let categorys:any
     const handleQueryCategory = () => {
@@ -86,35 +110,45 @@ export default defineComponent({
         }
       })
     }
-    const handleClick = ()=>{
-      console.log('menu click')
+    //查询资源数据
+    const handleQueryEbook = ()=>{
+      axios.get('/ebook/list', {
+        params:{
+          page:1,
+          size:10,
+          categoryId:categoryId
+        }
+      }).then((res) => {
+        const data = res.data.data
+        ebooks.value = data.list
+      });
     }
-
-
-
-
-
-
-
-
-
-
+    //点击分类菜单
+    const handleClick = (value:any)=>{
+      console.log('我是 menu click',value)
+      if (value.key === 'welcome'){
+        categoryId = ''
+        isShowAll.value = true
+        handleQueryEbook()
+      }else {
+        categoryId = value.key
+        isShowAll.value = false
+        handleQueryEbook()
+      }
+    }
     console.log('setup')
     const ebooks = ref()
-    const queryVo = {
-      id: null,
-      name: null
-    }
+
+
+
     onMounted(() => {
       handleQueryCategory()
       console.log("onMounted")
-      axios.post('/ebook/list', queryVo).then((res) => {
-        const data = res.data.data
-        ebooks.value = data
-      });
+      handleQueryEbook()
     })
     return {
       handleClick,
+      isShowAll,
       level1,
       ebooks,
       listData,

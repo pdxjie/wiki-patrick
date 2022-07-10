@@ -26,8 +26,7 @@
                         <img v-if="cover" :src="cover" alt="avatar">
                     </template>
                     <template v-slot:category="{ text, record }">
-                        <span>{{ getCategoryName(record.categoryId) }} / {{ getCategoryName(record.categoryPid)
-                            }}</span>
+                        <span>{{ getCategoryName(record.categoryPid) }} / {{ getCategoryName(record.categoryId) }}</span>
                     </template>
                     <template #action="{ record }">
                         <a-space size="small">
@@ -160,8 +159,8 @@ export default defineComponent({
     const modalLoading = ref(false)
     const handleModalOk = () =>{
       modalLoading.value = true
-      ebook.value.categoryId = categoryIds.value[0]
-      ebook.value.categoryPid = categoryIds.value[1]
+      ebook.value.categoryId = categoryIds.value[1]
+      ebook.value.categoryPid = categoryIds.value[0]
       axios.post('/ebook/saveOrUpdate',ebook.value).then(res =>{
         const data = res.data
         if (data.success){
@@ -220,7 +219,7 @@ export default defineComponent({
 
     })
 
-      const getCategoryName = (cid: number) => {
+      const getCategoryName = (cid: String) => {
           // console.log(cid)
           let result = "";
           categorys.forEach((item: any) => {
