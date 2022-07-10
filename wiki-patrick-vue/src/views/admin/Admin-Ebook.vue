@@ -199,11 +199,16 @@ export default defineComponent({
         loading.value = false
         const data = res.data
         if (res.data.success){
-          categorys = data.data
-          console.log('原始数组: ',categorys)
-          level1.value = []
-          level1.value = Tool.array2Tree(categorys,'000')
-          console.log('树形结构',level1.value)
+            categorys = data.data
+            console.log('原始数组: ',categorys)
+            level1.value = []
+            level1.value = Tool.array2Tree(categorys,'000')
+            console.log('树形结构',level1.value)
+            //加载完分类再加载资源列表
+            handleQuery({
+              page:1,
+              size: pagination.value.pageSize
+            })
         }else {
           message.error(res.data.message)
         }
@@ -212,10 +217,7 @@ export default defineComponent({
 
     onMounted(()=>{
       handleQueryCategory();
-      handleQuery({
-        page:1,
-        size: pagination.value.pageSize
-      })
+
     })
 
       const getCategoryName = (cid: number) => {
