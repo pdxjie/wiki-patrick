@@ -42,6 +42,9 @@ public class EbookController {
         if (!StringUtils.isEmpty(reqVo.getName())){
             wrapper.like("name", reqVo.getName());
         }
+        if (!StringUtils.isEmpty(reqVo.getCategoryId())){
+            wrapper.eq("category_id", reqVo.getCategoryId());
+        }
         Page<Ebook> page = new Page<>(reqVo.getPage(),reqVo.getSize());
 
         Page<Ebook> ebookPage = ebookService.page(page, wrapper);
@@ -74,6 +77,15 @@ public class EbookController {
         ResultData resultData = new ResultData();
         ebookService.removeById(id);
         resultData.setMessage("删除成功");
+        resultData.setSuccess(true);
+        return resultData;
+    }
+
+    @GetMapping("/find-ebook/{id}")
+    public ResultData findEbookById(@PathVariable("id")String id){
+        ResultData resultData = new ResultData();
+        Ebook ebook = ebookService.getById(id);
+        resultData.setData(ebook);
         resultData.setSuccess(true);
         return resultData;
     }
