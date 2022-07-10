@@ -119,6 +119,8 @@ export default defineComponent({
      */
     const handleQuery = (params: any)=>{
       loading.value = true
+      //如果不清楚现有数据，则编辑保存重新加载数据
+      //ebook.value = []
       axios.get('/ebook/list',{
         params:{
           page: params.page,
