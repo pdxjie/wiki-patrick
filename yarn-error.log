@@ -1,0 +1,26 @@
+Arguments: 
+  /usr/local/bin/node /opt/homebrew/Cellar/yarn/1.22.18/libexec/bin/yarn.js install
+
+PATH: 
+  /Library/Frameworks/Python.framework/Versions/3.10/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Applications/VMware Fusion Tech Preview.app/Contents/Public
+
+Yarn version: 
+  1.22.18
+
+Node version: 
+  14.17.6
+
+Platform: 
+  darwin x64
+
+Trace: 
+  Error: EACCES: permission denied, unlink '/Users/wumao/IdeaProjects/wiki-patrick/node_modules/.package_versions.json'
+
+npm manifest: 
+  No manifest
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

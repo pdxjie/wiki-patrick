@@ -1,13 +1,10 @@
-import Vue from 'vue'
-import VueRouter, { RouteConfig } from 'vue-router'
+import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import AboutView from '../views/AboutView.vue'
+import AdminCategory from '../views/admin/Admin-Category.vue'
 import AdminEbook from '../views/admin/Admin-Ebook.vue'
-// @ts-ignore
-import AdminCategory from '../views/admin/Admin-Category'
-Vue.use(VueRouter)
 
-const routes: Array<RouteConfig> = [
+const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     name: 'home',
@@ -27,13 +24,11 @@ const routes: Array<RouteConfig> = [
     path: '/about',
     name: 'about',
     component: AboutView
-  },
-
+  }
 ]
 
-const router = new VueRouter({
-  mode: 'history',
-  base: process.env.BASE_URL,
+const router = createRouter({
+  history: createWebHistory(process.env.BASE_URL),
   routes
 })
 

@@ -40,7 +40,7 @@ export class Tool {
     for (let i = 0; i < array.length; i++) {
       const c = array[i];
 
-      console.log(String(c.pid), String(parentId));
+      //console.log(String(c.pid), String(parentId));
       if (String(c.pid) === String(parentId)) {
         result.push(c);
 
