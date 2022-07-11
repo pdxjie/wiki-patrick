@@ -85,6 +85,8 @@ public class EbookController {
     public ResultData findEbookById(@PathVariable("id")String id){
         ResultData resultData = new ResultData();
         Ebook ebook = ebookService.getById(id);
+        ebook.setViewCount(ebook.getViewCount()+1);
+        ebookService.updateById(ebook);
         resultData.setData(ebook);
         resultData.setSuccess(true);
         return resultData;

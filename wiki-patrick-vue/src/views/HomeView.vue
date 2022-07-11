@@ -71,14 +71,16 @@
                   {{ text }}
                 </span>
               </template>
-              <a-list-item-meta :description="item.description">
-                <template #title>
-                  <a :href="item.href">{{ item.name }}</a>
-                </template>
-                <template #avatar>
-                  <a-avatar :src="item.cover" />
-                </template>
-              </a-list-item-meta>
+              <router-link :to="'/detail?id='+item.id">
+                <a-list-item-meta :description="item.description">
+                  <template #title>
+                    <a :href="item.href">{{ item.name }}</a>
+                  </template>
+                  <template #avatar>
+                    <a-avatar :src="item.cover" />
+                  </template>
+                </a-list-item-meta>
+              </router-link>
             </a-list-item>
           </a-card>
         </template>
