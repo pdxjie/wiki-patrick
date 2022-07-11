@@ -1,6 +1,6 @@
 <template>
   <a-layout>
-    <a-layout-content :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }">
+    <a-layout-content :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px',backgroundColor:'#EFF2F5' }">
       <a-row>
         <a-col :span="18">
           <a-card title="资源详情" style="width: 98%">

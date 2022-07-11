@@ -27,4 +27,5 @@ export default {
   margin: 16px 28px 16px 0;
   float: left;
 }
+
 </style>

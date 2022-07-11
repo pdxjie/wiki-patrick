@@ -9,7 +9,9 @@
             <a-menu-item key="/admin/ebook" v-show="true">
               <router-link to="/admin/ebook">资源管理</router-link>
             </a-menu-item>
-
+            <a-menu-item key="/admin/user" v-show="isShowAll">
+              <router-link to="/admin/user">用户管理</router-link>
+            </a-menu-item>
             <a-menu-item key="/admin/category" v-show="isShowAll">
                 <router-link to="/admin/category">分类管理</router-link>
             </a-menu-item>

@@ -23,7 +23,16 @@
 
 
 
-    <a-layout-content :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }">
+    <a-layout-content :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px',backgroundColor:'#EFF2F5' }">
+
+      <a-card >
+
+      </a-card>
+
+
+
+
+
 
       <div class="welcome" v-show="isShowAll">
         <!--电子书列表-->
@@ -195,6 +204,6 @@ export default defineComponent({
   margin: 5px 0;
 }
  element.style {
-  background: #f5f5f5!important;
+  background: #dddbdb !important;
 }
 </style>
