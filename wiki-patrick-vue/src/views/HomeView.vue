@@ -29,15 +29,20 @@
         <!--电子书列表-->
         <a-list :loading="loading" item-layout="vertical" size="large" :grid="{ gutter: 20, column: 3 }" :data-source="ebooks">
           <template #renderItem="{ item }">
-            <router-link :to="'/detail?id='+item.id">
+
             <a-card hoverable style="margin-right: 10px;margin-bottom: 10px;">
               <a-list-item key="item.name">
                 <template #actions>
-                <span v-for="{ type, text } in actions" :key="type">
-                  <component v-bind:is="type" style="margin-right: 8px" />
-                  {{ text }}
-                </span>
+                  <span>
+                    <component v-bind:is="'EyeOutlined'" style="margin-right: 8px" />
+                    {{ item.viewCount }}
+                  </span>
+                      <span>
+                    <component v-bind:is="'HeartOutlined'" style="margin-right: 8px" />
+                    {{ item.voteCount }}
+                  </span>
                 </template>
+                <router-link :to="'/detail?id='+item.id">
                 <a-list-item-meta :description="item.description">
                   <template #title>
                     <router-link :to="'/detail?id='+item.id">
@@ -48,9 +53,9 @@
                     <a-avatar :src="item.cover" />
                   </template>
                 </a-list-item-meta>
+                </router-link>
               </a-list-item>
             </a-card>
-            </router-link>
           </template>
         </a-list>
       </div>

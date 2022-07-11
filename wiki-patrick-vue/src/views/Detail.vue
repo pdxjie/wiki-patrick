@@ -8,10 +8,10 @@
               <a-col :span="6"></a-col>
               <a-col :span="12">
                 <div class="img-center">
-                  <img src="../assets/logo.png" alt="">
+                  <img :src="ebook.cover" :alt="ebook.name">
                 </div>
                 <div class="resource-name">
-                  <h4>Vue框架</h4>
+                  <h4>{{ebook.name}}</h4>
                 </div>
                 <div class="resource-data">
                   <div :style="{ whiteSpace: 'nowrap' }">
@@ -19,17 +19,19 @@
                       <template #title>
                         <span>浏览量</span>
                       </template>
-                      <a-button size="small" type="text" style="background-color: #b0afa5;margin-right: 10px"> <EyeOutlined />11 </a-button>
+                      <a-button size="small" type="text" style="background-color: #b0afa5;margin-right: 10px"> <EyeOutlined />
+                        {{ ebook.viewCount }} </a-button>
                     </a-tooltip>
                     <a-tooltip placement="topLeft">
                       <template #title>
                         <span>收藏</span>
                       </template>
-                      <a-button size="small" type="text" style="background-color: #ee1616;margin-right: 10px"> <HeartOutlined />11 </a-button>
+                      <a-button size="small" type="text" style="background-color: #ee1616;margin-right: 10px"> <HeartOutlined />
+                        {{ ebook.voteCount }} </a-button>
                     </a-tooltip>
                   </div>
                   <div class="resource-description">
-                    <p>这是一款极其好用的Vue框架，使用于前后端分离</p>
+                    <p>{{ ebook.description }}</p>
                   </div>
                 </div>
               </a-col>
@@ -65,11 +67,16 @@
                 <a-card hoverable style="margin-right: 10px;margin-bottom: 10px;">
                   <a-list-item key="item.name">
                     <template #actions>
-                <span v-for="{ type, text } in actions" :key="type">
-                  <component v-bind:is="type" style="margin-right: 8px" />
-                  {{ text }}
-                </span>
+                  <span>
+                    <component v-bind:is="'EyeOutlined'" style="margin-right: 8px" />
+                    {{ item.viewCount }}
+                  </span>
+                      <span>
+                    <component v-bind:is="'HeartOutlined'" style="margin-right: 8px" />
+                    {{ item.voteCount }}
+                  </span>
                     </template>
+                    <router-link :to="'/detail?id='+item.id">
                     <a-list-item-meta :description="item.description">
                       <template #title>
                         <a :href="item.href">{{ item.name }}</a>
@@ -78,6 +85,7 @@
                         <a-avatar :src="item.cover" />
                       </template>
                     </a-list-item-meta>
+                    </router-link>
                   </a-list-item>
                 </a-card>
               </template>
@@ -104,6 +112,25 @@ export default defineComponent({
     console.log('这是什么：',route.query.id)
     const ebooks = ref()
     const loading = ref(false)
+    const ebook = ref({
+      cover:'',
+      name:'',
+      description:'',
+      viewCount: 0,
+      voteCount: 0
+    })
+
+
+    const handleQueryEbookById = ()=>{
+      axios.get('/ebook/find-ebook/'+route.query.id).then(res =>{
+        console.log('ebook====>',res)
+        ebook.value.cover = res.data.data.cover
+        ebook.value.name = res.data.data.name
+        ebook.value.viewCount = res.data.data.viewCount
+        ebook.value.voteCount = res.data.data.voteCount
+        ebook.value.description = res.data.data.description
+      })
+    }
 
 
     //查询资源数据
@@ -122,6 +149,7 @@ export default defineComponent({
     }
     onMounted(() => {
       handleQueryEbook()
+      handleQueryEbookById()
     })
 
 
@@ -129,10 +157,11 @@ export default defineComponent({
     return {
       ebooks,
       loading,
-      actions: [
-        { type: 'star-o', text: '156' },
-        { type: 'like-o', text: '156' },
-      ],
+      ebook,
+      // actions: [
+      //   { type: 'star-o', text: '156' },
+      //   { type: 'like-o', text: '156' },
+      // ],
     }
 
 

@@ -14,7 +14,7 @@
                 <router-link to="/admin/category">分类管理</router-link>
             </a-menu-item>
             <a-menu-item key="/about">
-              <router-link to="/about">关于我们</router-link>
+              <router-link to="/about">关于站长</router-link>
             </a-menu-item>
         </a-menu>
     </a-layout-header>
