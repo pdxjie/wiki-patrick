@@ -29,6 +29,7 @@
         <!--电子书列表-->
         <a-list  item-layout="vertical" size="large" :grid="{ gutter: 20, column: 3 }" :data-source="ebooks">
           <template #renderItem="{ item }">
+            <router-link :to="'/detail?id='+item.id">
             <a-card hoverable style="margin-right: 10px;margin-bottom: 10px;">
               <a-list-item key="item.name">
                 <template #actions>
@@ -39,7 +40,9 @@
                 </template>
                 <a-list-item-meta :description="item.description">
                   <template #title>
-                    <a :href="item.href">{{ item.name }}</a>
+                    <router-link :to="'/detail?id='+item.id">
+                      {{item.name}}
+                    </router-link>
                   </template>
                   <template #avatar>
                     <a-avatar :src="item.cover" />
@@ -47,6 +50,7 @@
                 </a-list-item-meta>
               </a-list-item>
             </a-card>
+            </router-link>
           </template>
         </a-list>
       </div>
@@ -175,5 +179,8 @@ export default defineComponent({
   line-height: 50px;
   border-radius: 8%;
   margin: 5px 0;
+}
+ element.style {
+  background: #f5f5f5!important;
 }
 </style>

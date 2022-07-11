@@ -5,6 +5,7 @@ import store from './store'
 import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/antd.css';
 import axios from 'axios'
+import * as Icons from '@ant-design/icons-vue';
 axios.defaults.baseURL = process.env.VUE_APP_SERVER
 /**
  * 拦截器
@@ -23,8 +24,14 @@ axios.interceptors.response.use(response => {
 })
 
 
-createApp(App)
-    .use(store)
-    .use(router)
-    .use(Antd)
-    .mount('#app')
+const app = createApp(App)
+app.use(store)
+app.use(router)
+app.use(Antd)
+app.mount('#app')
+
+// 全局使用图标
+const icons: any = Icons;
+for (const i in icons) {
+    app.component(i, icons[i]);
+}
