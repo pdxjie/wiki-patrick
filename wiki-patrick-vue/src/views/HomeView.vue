@@ -27,7 +27,7 @@
 
       <div class="welcome" v-show="isShowAll">
         <!--电子书列表-->
-        <a-list  item-layout="vertical" size="large" :grid="{ gutter: 20, column: 3 }" :data-source="ebooks">
+        <a-list :loading="loading" item-layout="vertical" size="large" :grid="{ gutter: 20, column: 3 }" :data-source="ebooks">
           <template #renderItem="{ item }">
             <router-link :to="'/detail?id='+item.id">
             <a-card hoverable style="margin-right: 10px;margin-bottom: 10px;">
@@ -56,7 +56,7 @@
       </div>
 
       <!--电子书列表-->
-      <a-list v-show="!isShowAll" item-layout="vertical" size="large" :grid="{ gutter: 20, column: 3 }" :data-source="ebooks">
+      <a-list :loading="loading" v-show="!isShowAll" item-layout="vertical" size="large" :grid="{ gutter: 20, column: 3 }" :data-source="ebooks">
         <template #renderItem="{ item }">
           <a-card hoverable style="margin-right: 10px;margin-bottom: 10px;">
             <a-list-item key="item.name">
@@ -96,11 +96,13 @@ export default defineComponent({
   name: 'HomeView',
   // Vue3新增的初始化方法
   setup() {
+    const loading = ref(false)
     const isShowAll = ref(true)
     let categoryId = ''
     const level1 = ref()
     let categorys:any
     const handleQueryCategory = () => {
+
       axios.get('/category/all').then(res =>{
         const data = res.data
         if (res.data.success){
@@ -116,6 +118,7 @@ export default defineComponent({
     }
     //查询资源数据
     const handleQueryEbook = ()=>{
+      loading.value = true
       axios.get('/ebook/list', {
         params:{
           page:1,
@@ -123,6 +126,7 @@ export default defineComponent({
           categoryId:categoryId
         }
       }).then((res) => {
+        loading.value = false
         const data = res.data.data
         ebooks.value = data.list
       });
@@ -133,8 +137,10 @@ export default defineComponent({
       if (value.key === 'welcome'){
         categoryId = ''
         isShowAll.value = true
+        loading.value = false
         handleQueryEbook()
       }else {
+        loading.value = false
         categoryId = value.key
         isShowAll.value = false
         handleQueryEbook()
@@ -151,6 +157,7 @@ export default defineComponent({
       handleQueryEbook()
     })
     return {
+      loading,
       handleClick,
       isShowAll,
       level1,
@@ -174,8 +181,8 @@ export default defineComponent({
 
 <style scoped>
 .ant-avatar {
-  width: 50px;
-  height: 50px;
+  width: 80px;
+  height: 80px;
   line-height: 50px;
   border-radius: 8%;
   margin: 5px 0;
