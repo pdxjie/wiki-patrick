@@ -48,11 +48,8 @@
         <a-modal title="资源表单" v-model:visible="modalVisible" :confirm-loading="modalLoading" @ok="handleModalOk"
             @cancel="handleCancel">
             <a-form v-model="user" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }">
-                <a-form-item label="头像">
-                    <a-input v-model:value="user.avatar" />
-                </a-form-item>
                 <a-form-item label="登录名">
-                    <a-input v-model:value="user.loginName" />
+                    <a-input v-model:value="user.loginName" :disabled="user.id"/>
                 </a-form-item>
               <a-form-item label="昵称">
                 <a-input v-model:value="user.name" />
@@ -158,7 +155,6 @@ export default defineComponent({
     const modalLoading = ref(false)
     const handleModalOk = () =>{
       modalLoading.value = true
-      alert(JSON.stringify(user.value))
       axios.post('/user/saveOrUpdate',user.value).then(res =>{
         const data = res.data
         if (data.success){
@@ -170,6 +166,8 @@ export default defineComponent({
             page:pagination.value.current,
             size: pagination.value.pageSize
           })
+        }else {
+          message.error(res.data.message)
         }
       })
     }
