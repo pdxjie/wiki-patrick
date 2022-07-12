@@ -13,6 +13,7 @@ import java.util.List;
  */
 @Data
 public class UserResp<T> {
+
     private Long total;
 
     private List<T> list;

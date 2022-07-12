@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Date;
 
 /**
  * @author 派 大 星
@@ -34,8 +35,8 @@ public class UserController {
         ResultData<UserResp<User>> resultData = new ResultData<>();
         QueryWrapper<User> wrapper = new QueryWrapper<>();
         //条件查询
-        if ((reqVo.getLoginName() != null)){
-            wrapper.eq("login_name",reqVo.getLoginName());
+        if ((reqVo.getName() != null)){
+            wrapper.like("name",reqVo.getName());
         }
         Page<User> page = new Page<>(reqVo.getPage(),reqVo.getSize());
 
@@ -55,9 +56,12 @@ public class UserController {
         BeanUtils.copyProperties(req,user);
         //如果ID为空则说明是新增
         if (ObjectUtils.isEmpty(req.getId())){
-            user.setStatus(false);
+            user.setStatus(true);
+            user.setAvatar("https://portrait.gitee.com/uploads/avatars/user/2829/8488080_gao-wumao_1651141916.png!avatar60");
+            user.setCreateTime(new Date());
             userService.save(user);
         }else {
+            user.setUpdateTime(new Date());
             userService.updateById(user);
         }
         resultData.setSuccess(true);
@@ -83,7 +87,16 @@ public class UserController {
         resultData.setSuccess(true);
         return resultData;
     }
-
-
+    //修改用户状态
+    @GetMapping("/state/{id}")
+    public ResultData updateState(@PathVariable("id")String id){
+        ResultData resultData = new ResultData();
+        User user = userService.getById(id);
+        user.setStatus(!user.getStatus());
+        userService.updateById(user);
+        resultData.setSuccess(true);
+        resultData.setMessage("修改成功");
+        return resultData;
+    }
 
 }
