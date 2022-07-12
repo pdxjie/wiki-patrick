@@ -27,7 +27,7 @@ public class UserSaveReq {
     @NotNull(message = "【昵称】不能为空")
     private String name;
     @NotNull(message = "【密码】不能为空")
-    @Length(min = 6,max = 20,message = "【密码】6—20位")
+    @Length(min = 6,max = 100,message = "【密码】6—100位")
     private String password;
 
     private Boolean status;

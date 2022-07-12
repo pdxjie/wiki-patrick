@@ -14,6 +14,7 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -55,6 +56,7 @@ public class UserController {
     public ResultData saveOrUpdate(@Valid @RequestBody(required = false) UserSaveReq req){
         ResultData resultData = new ResultData();
         User user = new User();
+        req.setPassword(DigestUtils.md5DigestAsHex(req.getPassword().getBytes()));
         BeanUtils.copyProperties(req,user);
         //如果ID为空则说明是新增
         if (ObjectUtils.isEmpty(req.getId())){
@@ -67,10 +69,10 @@ public class UserController {
             }else {
                 throw new BusinessException(BusinessExceptionCode.USER_LOGIN_NAME_EXIST);
             }
-
         }else {
             user.setUpdateTime(new Date());
             user.setLoginName(null);
+            user.setPassword(null);
             userService.updateById(user);
         }
         resultData.setSuccess(true);
