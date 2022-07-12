@@ -1,5 +1,10 @@
 package com.pdx.exception;
-
+/**
+ * @author 派 大 星
+ * @website https://blog.csdn.net/Gaowumao
+ * @Date 2022-07-09 01:17
+ * @Description 枚举信息
+ */
 public enum BusinessExceptionCode {
 
     USER_LOGIN_NAME_EXIST("登录名已存在"),

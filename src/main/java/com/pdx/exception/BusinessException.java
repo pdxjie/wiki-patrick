@@ -1,5 +1,10 @@
 package com.pdx.exception;
-
+/**
+ * @author 派 大 星
+ * @website https://blog.csdn.net/Gaowumao
+ * @Date 2022-07-09 01:17
+ * @Description 异常处理
+ */
 public class BusinessException extends RuntimeException{
 
     private BusinessExceptionCode code;
