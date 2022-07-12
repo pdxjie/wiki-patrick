@@ -165,7 +165,7 @@ export default defineComponent({
         if (data.success){
           modalVisible.value = false
           modalLoading.value = false
-
+          message.success(res.data.message)
           //重新加载列表
           handleQuery({
             page:pagination.value.current,
