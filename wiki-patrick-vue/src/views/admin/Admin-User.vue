@@ -54,8 +54,8 @@
               <a-form-item label="昵称">
                 <a-input v-model:value="user.name" />
               </a-form-item>
-              <a-form-item label="密码">
-                <a-input-password v-model:value="user.password" />
+              <a-form-item label="密码" v-show="!user.password">
+                <a-input-password v-model:value="user.password"  />
               </a-form-item>
             </a-form>
         </a-modal>
@@ -67,6 +67,8 @@ import {defineComponent,reactive,toRefs,onMounted,ref} from "vue";
 import axios from "axios";
 import { message } from 'ant-design-vue'
 import {Tool} from "@/util/tool";
+declare let hexMd5:any
+declare let KEY:any
 export default defineComponent({
   name:'Admin-Ebook',
   setup(){
@@ -155,6 +157,9 @@ export default defineComponent({
     const modalLoading = ref(false)
     const handleModalOk = () =>{
       modalLoading.value = true
+
+      user.value.password = hexMd5(user.value.passowrd+ KEY )
+
       axios.post('/user/saveOrUpdate',user.value).then(res =>{
         const data = res.data
         if (data.success){
