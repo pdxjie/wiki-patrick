@@ -3,6 +3,7 @@ package com.pdx.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.pdx.entity.User;
+import com.pdx.entity.req.ResetPwdReq;
 import com.pdx.entity.req.UserQueryReq;
 import com.pdx.entity.req.UserSaveReq;
 import com.pdx.entity.resp.UserResp;
@@ -120,6 +121,17 @@ public class UserController {
         }else {
             return user;
         }
+    }
+
+    @PostMapping("/reset-password")
+    public ResultData resetPassword(@RequestBody(required = false) ResetPwdReq req){
+        ResultData resultData = new ResultData();
+        User user = new User();
+        BeanUtils.copyProperties(req,user);
+        userService.updateById(user);
+        resultData.setSuccess(true);
+        resultData.setMessage("修改成功");
+        return resultData;
     }
 
 }
