@@ -14,7 +14,7 @@
                         </a-form-item>
                       <a-form-item>
                         <a-button type="primary" @click="add()">
-                          推荐
+                          添加(后端测试使用)
                         </a-button>
                       </a-form-item>
                     </a-form>
@@ -22,12 +22,13 @@
                 
                 <a-table :columns="columns" :row-key="record => record.id" :data-source="users"
                     :pagination="pagination" :loading="loading" @change="handleTableChange">
-                    <template #avatar="{ text : avatar }">
-                        <img v-if="avatar" :src="avatar" alt="avatar">
+                  <template #avatar="{ text : avatar }">
+                    <img  :src="avatar" alt="avatar">
+                  </template>
+                    <template v-slot:status="{text,record}" >
+                      <a-switch checked-children="正常" un-checked-children="封禁" @change="changeState(record.id)" v-model:checked="record.status" />
                     </template>
-                    <template #status="{ text : status }">
-                      <a-switch v-model:checked="user.status" />
-                    </template>
+
                     <template #action="{ record }">
                         <a-space size="small">
                             <a-button type="primary" @click="edit(record)">
@@ -56,8 +57,8 @@
               <a-form-item label="昵称">
                 <a-input v-model:value="user.name" />
               </a-form-item>
-              <a-form-item label="状态">
-                <a-switch v-model:checked="user.status" />
+              <a-form-item label="密码">
+                <a-input-password v-model:value="user.password" />
               </a-form-item>
             </a-form>
         </a-modal>
@@ -65,13 +66,14 @@
 </template>
 
 <script lang="ts">
-import {defineComponent,onMounted,ref} from "vue";
+import {defineComponent,reactive,toRefs,onMounted,ref} from "vue";
 import axios from "axios";
 import { message } from 'ant-design-vue'
 import {Tool} from "@/util/tool";
 export default defineComponent({
   name:'Admin-Ebook',
   setup(){
+    const checked = ref<boolean>(false);
     const param = ref()
     param.value = {}
     const users = ref()
@@ -82,11 +84,7 @@ export default defineComponent({
     })
     const loading = ref(false)
     const columns = [
-      {
-        title:'头像',
-        dataIndex:'avatar',
-        slots: { customRender: 'avatar' }
-      },
+
       {
         title:'登录名',
         dataIndex:'loginName',
@@ -102,8 +100,13 @@ export default defineComponent({
         slots: { customRender: 'status' }
       },
       {
+        title:'头像',
+        dataIndex:'avatar',
+        slots: { customRender: 'avatar' }
+      },
+      {
         title:'注册时间',
-        dataIndex: 'voteCount'
+        dataIndex: 'createTime'
       },
       {
         title:'操作',
@@ -122,7 +125,7 @@ export default defineComponent({
         params:{
           page: params.page,
           size: params.size,
-          name: param.value.loginName
+          name: param.value.name
         }
       }).then(res =>{
         loading.value = false
@@ -155,11 +158,13 @@ export default defineComponent({
     const modalLoading = ref(false)
     const handleModalOk = () =>{
       modalLoading.value = true
+      alert(JSON.stringify(user.value))
       axios.post('/user/saveOrUpdate',user.value).then(res =>{
         const data = res.data
         if (data.success){
           modalVisible.value = false
           modalLoading.value = false
+
           //重新加载列表
           handleQuery({
             page:pagination.value.current,
@@ -201,7 +206,16 @@ export default defineComponent({
         }
       })
     }
+    const changeState = (id:String)=>{
+      axios.get('/user/state/'+id).then(res=>{
+        if (res.data.success){
+          message.success(res.data.message)
+        }
+      })
+    }
     return {
+      changeState,
+      checked,
       param,
       users,
       pagination,

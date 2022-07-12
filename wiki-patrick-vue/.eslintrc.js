@@ -27,6 +27,7 @@ module.exports = {
     'vue/no-parsing-error': 'off',
     'vue/no-deprecated-slot-scope-attribute': 'off',
     'vue/multi-word-component-names':'off',
-    '@typescript-eslint/no-empty-function':'off'
+    '@typescript-eslint/no-empty-function':'off',
+    'vue/valid-v-model':'off'
   }
 }
