@@ -7,6 +7,8 @@ import com.pdx.entity.req.UserQueryReq;
 import com.pdx.entity.req.UserSaveReq;
 import com.pdx.entity.resp.UserResp;
 import com.pdx.entity.resp.ResultData;
+import com.pdx.exception.BusinessException;
+import com.pdx.exception.BusinessExceptionCode;
 import com.pdx.service.UserService;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -56,12 +58,19 @@ public class UserController {
         BeanUtils.copyProperties(req,user);
         //如果ID为空则说明是新增
         if (ObjectUtils.isEmpty(req.getId())){
-            user.setStatus(true);
-            user.setAvatar("https://portrait.gitee.com/uploads/avatars/user/2829/8488080_gao-wumao_1651141916.png!avatar60");
-            user.setCreateTime(new Date());
-            userService.save(user);
+            User byLoginName = selectUserByLoginName(req.getLoginName());
+            if (ObjectUtils.isEmpty(byLoginName)) {
+                user.setStatus(true);
+                user.setAvatar("https://portrait.gitee.com/uploads/avatars/user/2829/8488080_gao-wumao_1651141916.png!avatar60");
+                user.setCreateTime(new Date());
+                userService.save(user);
+            }else {
+                throw new BusinessException(BusinessExceptionCode.USER_LOGIN_NAME_EXIST);
+            }
+
         }else {
             user.setUpdateTime(new Date());
+            user.setLoginName(null);
             userService.updateById(user);
         }
         resultData.setSuccess(true);
@@ -97,6 +106,18 @@ public class UserController {
         resultData.setSuccess(true);
         resultData.setMessage("修改成功");
         return resultData;
+    }
+
+
+
+    // 根据用户登录名获取用户信息
+    private User selectUserByLoginName(String loginName){
+        User user = userService.getOne(new QueryWrapper<User>().eq("login_name", loginName));
+        if (user == null){
+            return null;
+        }else {
+            return user;
+        }
     }
 
 }

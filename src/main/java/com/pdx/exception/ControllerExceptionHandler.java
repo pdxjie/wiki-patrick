@@ -29,4 +29,23 @@ public class ControllerExceptionHandler {
         return resultData;
     }
 
+    @ExceptionHandler(value = BusinessException.class)
+    @ResponseBody
+    public ResultData validExceptionHandler(BusinessException e){
+        ResultData resultData = new ResultData();
+        log.warn("业务异常：{}",e.getCode().getDesc());
+        resultData.setSuccess(false);
+        resultData.setMessage(e.getCode().getDesc());
+        return resultData;
+    }
+
+    @ExceptionHandler(value = Exception.class)
+    @ResponseBody
+    public ResultData validExceptionHandler(Exception e){
+        ResultData resultData = new ResultData();
+        log.error("系统异常：",e);
+        resultData.setSuccess(false);
+        resultData.setMessage("系统出现异常...请联系管理员");
+        return resultData;
+    }
 }
